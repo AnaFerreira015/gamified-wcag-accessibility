@@ -86,15 +86,18 @@ app.get('/students/:id/achievements', async (req, res) => {
 });
 
 app.put('/students/:id/achievements', async (req, res) => {
-  const student = await prisma.student.update({
-    where: { id: Number(req.params.id) },
-    data: {
-      achievements: {
-        connect: { badgeId: req.body.achievementId }
+  try {
+    await prisma.studentAchievement.create({
+      data: {
+        studentId: Number(req.params.id),
+        badgeId: req.body.achievementId
       }
-    }
-  });
-  res.json(student);
+    });
+    res.status(200).json({ message: 'Conquista adicionada' });
+  } catch (err) {
+    console.error('Erro ao adicionar conquista:', err);
+    res.status(500).json({ error: 'Erro ao adicionar conquista' });
+  }
 });
 
 app.get('/achievements', async (req, res) => {

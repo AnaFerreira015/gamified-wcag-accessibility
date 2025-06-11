@@ -37,15 +37,15 @@ Este repositório contém o código-fonte de uma aplicação educacional interat
 ```
 /
 ├── src/
-│ ├── components/
-│ ├── contexts/
-│ ├── hooks/
-│ ├── pages/
-│ └── routes/
-└── public/
+│   ├── components/
+│   ├── contexts/
+│   ├── hooks/
+│   ├── pages/
+│   └── routes/
+├── public/
 ├── backend/
-│ ├── prisma/
-│ └── index.js
+│   ├── prisma/
+│   └── index.js
 ├── README.md
 └── package.json
 ```
@@ -98,6 +98,42 @@ Este projeto segue princípios da WCAG 2.1, com foco em:
 - Feedback textual e visual
 - Compatibilidade com leitores de tela
 - Uso de semântica HTML apropriada
+
+## 📸 Capturas de Tela
+
+### 🧠 Quiz Interativo (estudante)
+![Quiz perceptível respondido](src/assets/quiz-perceptible.png)
+*Interface do quiz com tempo e tentativas visíveis, apresentando uma pergunta sobre contraste de cores.*
+
+---
+
+### 🛠️ Edição de Perguntas (professor)
+![Edição de pergunta e alternativas](src/assets/quiz-perceptible-editar-professor.png)
+*Modo de edição inline no qual o professor pode alterar o enunciado e as alternativas da pergunta.*
+
+---
+
+### 📊 Dashboard do Professor
+![Dashboard do professor](src/assets/dashboard-professor.png)
+*Resumo visual da turma, com gráfico de progresso, lista de alunos e exportação de dados.*
+
+---
+
+### 🧍‍♀️ Dashboard do Aluno
+![Dashboard do aluno](src/assets/dashboard-aluno.png)
+*Visão individual do progresso do estudante, incluindo módulos completados e conquistas.*
+
+---
+
+### 🙋 Perfil do Aluno
+![Perfil do aluno](src/assets/perfil-aluno.png)
+*Perfil com progresso geral e conquistas desbloqueadas, exibidas com ícones e cores temáticas.*
+
+---
+
+### 👩‍🏫 Perfil do Professor
+![Perfil do professor](src/assets/perfil-professor.png)
+*Resumo da turma no perfil do professor, incluindo estatísticas de progresso e link para o dashboard.*
 
 ## 📄 Licença
 

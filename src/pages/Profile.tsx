@@ -29,7 +29,13 @@ export default function Profile() {
     if (isTeacher) {
       fetch('http://localhost:3000/teacher/overview')
         .then(res => res.json())
-        .then(setClassOverview);
+        .then(data => {
+          if (!Array.isArray(data)) {
+            console.error("Resposta inválida no perfil:", data);
+            return;
+          }
+          setClassOverview(data);
+        });
     }
   }, [isStudent, isTeacher]);
 
@@ -100,9 +106,8 @@ export default function Profile() {
                 return (
                   <div
                     key={ach.id}
-                    className={`p-4 rounded shadow transition ${
-                      isUnlocked ? 'bg-green-100 text-green-800' : 'bg-gray-200 opacity-50'
-                    }`}
+                    className={`p-4 rounded shadow transition ${isUnlocked ? 'bg-green-100 text-green-800' : 'bg-gray-200 opacity-50'
+                      }`}
                   >
                     <h3 className="text-lg font-medium text-gray-900">
                       {isUnlocked ? '🏅 ' : '🔒 '}

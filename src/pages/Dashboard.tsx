@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth, type User } from '../contexts/AuthContext';
 import TeacherDashboard from './TeacherDashboard';
+import { useAchievements } from '../hooks/useAchievements';
 
 export default function Dashboard() {
+  const { allAchievements } = useAchievements();
   const { user } = useAuth() as { user: User };
   const [progress, setProgress] = useState<Record<string, number>>({});
   const [achievements, setAchievements] = useState<string[]>([]);
@@ -23,8 +25,24 @@ export default function Dashboard() {
               .filter(([key]) => keys.includes(key))
               .map(([key, val]) => [key, Number(val)])
           ) as Record<string, number>;
-        
+
           setProgress(filtered);
+
+          keys.forEach(module => {
+            if (filtered[module] === 100 && !achievements.includes(`a_${module}`)) {
+              fetch(`http://localhost:3000/students/${user.id}/achievements`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ achievementId: `a_${module}` })
+              })
+                .then(() => {
+                  fetch(`http://localhost:3000/students/${user.id}/achievements`)
+                    .then(res => res.json())
+                    .then(setAchievements);
+                })
+                .catch((err) => console.error('Erro ao desbloquear conquista:', err));
+            }
+          });
         });
 
       fetch(`http://localhost:3000/students/${user.id}/achievements`)
@@ -40,7 +58,7 @@ export default function Dashboard() {
     }
   }, [user]);
 
-  console.log('classOverview: ', classOverview);
+  console.log('achievements: ', achievements);
 
   if (!user) return <Navigate to="/login" />;
 
@@ -62,7 +80,7 @@ export default function Dashboard() {
                     <li key={key}>
                       ✔ {key.charAt(0).toUpperCase() + key.slice(1)} — {val}%
                     </li>
-                ))}
+                  ))}
               </ul>
             </div>
 
@@ -70,9 +88,14 @@ export default function Dashboard() {
               <h2 className="text-lg font-semibold text-gray-700">Conquistas</h2>
               <ul className="mt-1 text-sm text-gray-600 space-y-1">
                 {achievements.length > 0 ? (
-                  achievements.map(id => (
-                    <li key={id}>🏅 {id}</li>
-                  ))
+                  achievements.map(id => {
+                    const badge = allAchievements.find(b => b.id === id);
+                    return (
+                      <li key={id}>
+                        🏅 {badge?.title || id}
+                      </li>
+                    );
+                  })
                 ) : (
                   <li className="text-gray-400">Nenhuma conquista ainda.</li>
                 )}

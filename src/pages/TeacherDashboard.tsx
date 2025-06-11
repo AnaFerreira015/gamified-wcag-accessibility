@@ -25,6 +25,11 @@ export default function TeacherDashboard() {
     fetch(`http://localhost:3000/teacher/overview`)
       .then(res => res.json())
       .then(data => {
+        if (!Array.isArray(data)) {
+          console.error("Resposta inválida do backend:", data);
+          return;
+        }
+      
         const safeData = data.map((s: any) => ({
           id: s.id ?? s.name ?? Math.random().toString(36).substring(2),
           name: s.name ?? 'Sem nome',
@@ -33,6 +38,7 @@ export default function TeacherDashboard() {
           achievements: Array.isArray(s.achievements) ? s.achievements : [],
           lastActivity: s.lastActivity ?? null,
         }));
+      
         setClassOverview(safeData);
       });
   }, [user]);
