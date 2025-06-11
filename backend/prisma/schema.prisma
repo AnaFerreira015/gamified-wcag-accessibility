@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Student {
+  id           Int               @id @default(autoincrement())
+  name         String
+  email        String            @unique
+  password     String
+  role         String
+  progress     Progress?
+  achievements StudentAchievement[]
+  responses    ResponseHistory[]
+}
+
+model Progress {
+  id              Int     @id @default(autoincrement())
+  studentId       Int     @unique
+  perceptible     Int
+  operable        Int
+  understandable  Int
+  robust          Int
+  student         Student @relation(fields: [studentId], references: [id])
+}
+
+model StudentAchievement {
+  id        Int     @id @default(autoincrement())
+  studentId Int
+  badgeId   String  @unique
+  student   Student @relation(fields: [studentId], references: [id])
+}
+
+model Question {
+  id           Int    @id @default(autoincrement())
+  module       String
+  text         String
+  options      String
+  correctIndex Int
+}
+
+model ResponseHistory {
+  id         Int      @id @default(autoincrement())
+  studentId  Int
+  questionId Int
+  isCorrect  Boolean
+  timestamp  DateTime @default(now())
+
+  student    Student  @relation(fields: [studentId], references: [id])
+}
